@@ -1,3 +1,17 @@
+This is the repository for the publication
+"Deutschmann J., Hielscher KS.J., German R. (2020) An ns-3 Model for Multipath Communication with Terrestrial and Satellite Links. In: Hermanns H. (eds) Measurement, Modelling and Evaluation of Computing Systems. MMB 2020. Lecture Notes in Computer Science, vol 12040. Springer, Cham"
+https://doi.org/10.1007/978-3-030-43024-5_5
+
+It is based on ns-3.29, please follow the official build instructions first.
+All simulations can be run with mmb2020.sh
+The figures can be generated with mmb2020.R
+
+The code is far from being optimal, any feedback is appreciated.
+
+---------------------------------------------------------------
+
+
+
 
     The Network Simulator, Version 3
     --------------------------------

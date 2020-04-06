@@ -321,8 +321,21 @@ PointToPointNetDevice::TransmitComplete (void)
   if (p == 0)
     {
       NS_LOG_LOGIC ("No pending packets in device queue after tx complete");
+
+      //MMB2020 TMC PEP modification
+      if(!m_transmitCompleteCb.IsNull())
+      {
+        m_transmitCompleteCb(this);
+      }
+
       return;
     }
+
+  //MMB2020 TMC PEP modification
+  if(!m_transmitCompleteCb.IsNull())
+  {
+    NS_ASSERT_MSG(false, "MMB2020 TMC: P2P NetDevice should not have packets in m_queue");
+  }
 
   //
   // Got another packet off of the queue, so start the transmit process again.
@@ -583,6 +596,13 @@ PointToPointNetDevice::Send (
           bool ret = TransmitStart (packet);
           return ret;
         }
+      else //MMB2020 TMC PEP modification
+      {
+          if(!m_transmitCompleteCb.IsNull())
+          {
+              NS_ASSERT_MSG(false, "MMB2020 TMC: m_txMachineState != READY but there is a packet queued. Should not happen with TMC PEPs.");
+          }
+      }
       return true;
     }
 

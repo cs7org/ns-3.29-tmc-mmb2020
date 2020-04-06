@@ -2579,6 +2579,19 @@ TcpSocketBase::SendEmptyPacket (uint8_t flags)
                     << Simulator::Now ().GetSeconds () << " to expire at time "
                     << (Simulator::Now () + m_rto.Get ()).GetSeconds ());
       m_retxEvent = Simulator::Schedule (m_rto, &TcpSocketBase::SendEmptyPacket, this, flags);
+
+      //TMC MMB2020: One simulation run did not finish due to endless FIN packets (bug?)
+      //copied from TcpSocketBase::ReTxTimeout ()
+      if (m_dataRetrCount == 0)
+        {
+          NS_LOG_UNCOND ("No more SYN/FIN retries available. Dropping connection");
+          DeallocateEndPoint ();
+          return;
+        }
+      else
+        {
+          --m_dataRetrCount;
+        }
     }
 }
 
@@ -3452,6 +3465,20 @@ TcpSocketBase::ReTxTimeout ()
         { // Must have lost FIN, re-send
           SendEmptyPacket (TcpHeader::FIN);
         }
+
+      //TMC MMB2020: One simulation run did not finish due to endless FIN packets (bug?)
+      //copied from below
+      if (m_dataRetrCount == 0)
+        {
+          NS_LOG_UNCOND ("No more SYN/FIN retries available. Dropping connection");
+          DeallocateEndPoint ();
+          return;
+        }
+      else
+        {
+          --m_dataRetrCount;
+        }
+
       return;
     }
 

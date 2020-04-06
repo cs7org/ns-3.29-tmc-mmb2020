@@ -150,6 +150,11 @@ public:
    */
   void Receive (Ptr<Packet> p);
 
+  // MMB2020 TMC PEP modification
+  // We want a direct notification in the application as
+  // soon as the p2p NetDevice finishes transmission
+  Callback<void, Ptr<NetDevice> > m_transmitCompleteCb;
+
   // The remaining methods are documented in ns3::NetDevice*
 
   virtual void SetIfIndex (const uint32_t index);
